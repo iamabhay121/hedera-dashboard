@@ -34,6 +34,8 @@ function App() {
   const [showCreateAccount, setShowCreateAccount] = useState(false);
   const [showCreateToken, setShowCreateToken] = useState(false);
   const [isLoadingBalances, setIsLoadingBalances] = useState(false);
+  const [createdAccountInfo, setCreatedAccountInfo] = useState(null);
+  const [createdTokenInfo, setCreatedTokenInfo] = useState(null);
 
   // Query balances
   const fetchBalances = useCallback(async () => {
@@ -93,8 +95,16 @@ function App() {
       // Auto-fill the fields
       setAccountId(newAccountId);
       setPrivateKey(newPrivateKey);
+      
+      // Store created account info for display
       if (!autoCreate) {
+        setCreatedAccountInfo({
+          accountId: newAccountId,
+          privateKey: newPrivateKey
+        });
         setStatus(`✅ Account created! Account ID: ${newAccountId}`);
+        // Clear the created account info after 30 seconds
+        setTimeout(() => setCreatedAccountInfo(null), 30000);
       }
     } catch (error) {
       if (autoCreate) {
@@ -137,12 +147,24 @@ function App() {
       tokenData.decimals || 0
     );
 
-    return result;
+    // Include token metadata in result
+    return {
+      ...result,
+      tokenName: tokenData.tokenName,
+      tokenSymbol: tokenData.tokenSymbol,
+      initialSupply: tokenData.initialSupply || 0,
+      decimals: tokenData.decimals || 0,
+      treasuryAccountId: accountId
+    };
   };
 
   // Handle token creation success
-  const handleTokenCreated = (newTokenId) => {
-    setTokenId(newTokenId);
+  const handleTokenCreated = (tokenInfo) => {
+    setTokenId(tokenInfo.tokenId);
+    // Store token info for display
+    setCreatedTokenInfo(tokenInfo);
+    // Auto-dismiss after 30 seconds
+    setTimeout(() => setCreatedTokenInfo(null), 30000);
     // Refresh balances after token creation
     setTimeout(() => {
       fetchBalances();
@@ -170,6 +192,8 @@ function App() {
           setOperatorKey={setOperatorKey}
           onCreateAccount={() => createAccount(false)}
           onClearOperator={clearOperator}
+          createdAccountInfo={createdAccountInfo}
+          onDismissSuccess={() => setCreatedAccountInfo(null)}
         />
 
         <TokenCreation
@@ -179,6 +203,8 @@ function App() {
           privateKey={privateKey}
           onCreateToken={createToken}
           onTokenCreated={handleTokenCreated}
+          createdTokenInfo={createdTokenInfo}
+          onDismissSuccess={() => setCreatedTokenInfo(null)}
         />
         
         <div className="inputs">
@@ -274,6 +300,8 @@ function App() {
           client={TESTNET_CLIENT}
           tokenId={tokenId}
           onAssociationSuccess={fetchBalances}
+          currentAccountId={accountId}
+          currentPrivateKey={privateKey}
         />
 
         <TokenTransferSection

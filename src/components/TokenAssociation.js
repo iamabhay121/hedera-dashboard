@@ -1,12 +1,19 @@
 import React, { useState } from 'react';
 import { associateToken } from '../services/tokenService';
 
-const TokenAssociation = ({ client, tokenId, onAssociationSuccess }) => {
+const TokenAssociation = ({ client, tokenId, onAssociationSuccess, currentAccountId, currentPrivateKey }) => {
   const [recipientAccountId, setRecipientAccountId] = useState('');
   const [recipientPrivateKey, setRecipientPrivateKey] = useState('');
   const [associationTokenId, setAssociationTokenId] = useState(tokenId || '');
   const [isLoading, setIsLoading] = useState(false);
   const [status, setStatus] = useState('');
+
+  const useCurrentAccount = () => {
+    if (currentAccountId && currentPrivateKey) {
+      setRecipientAccountId(currentAccountId);
+      setRecipientPrivateKey(currentPrivateKey);
+    }
+  };
 
   // Update associationTokenId when tokenId prop changes
   React.useEffect(() => {
@@ -51,17 +58,53 @@ const TokenAssociation = ({ client, tokenId, onAssociationSuccess }) => {
   return (
     <div className="association-section" style={{ marginBottom: '20px', padding: '20px', border: '1px solid #ffa500', borderRadius: '8px', backgroundColor: '#fff8e1' }}>
       <h3 style={{color: 'black'}}>🔗 Associate Account with Token</h3>
-      <p style={{ fontSize: '12px', color: '#666', marginBottom: '15px' }}>
-        Before receiving tokens, an account must be associated with the token. Enter the account details that need to be associated.
-      </p>
+      <div style={{ 
+        fontSize: '12px', 
+        color: '#856404', 
+        marginBottom: '15px',
+        padding: '10px',
+        backgroundColor: '#fff3cd',
+        border: '1px solid #ffc107',
+        borderRadius: '4px'
+      }}>
+        <strong>⚠️ Important:</strong> Before receiving tokens, an account must be associated with the token. 
+        <br /><br />
+        <strong>Why you need the private key:</strong> In Hedera, only the account owner can associate their account with a token. 
+        The association transaction must be signed by the account being associated, which requires that account's private key.
+        <br /><br />
+        <strong>In production:</strong> The recipient would typically associate their own account themselves. 
+        This feature is useful when you control multiple accounts for testing purposes.
+      </div>
       
-      <input
-        placeholder="Recipient Account ID (0.0.123456)"
-        value={recipientAccountId}
-        onChange={(e) => setRecipientAccountId(e.target.value)}
-        disabled={isLoading}
-        style={{ marginBottom: '10px', padding: '8px', width: '100%', maxWidth: '400px', display: 'block', marginLeft: 'auto', marginRight: 'auto' }}
-      />
+      <div style={{ position: 'relative', width: '100%', maxWidth: '400px', margin: '0 auto 10px auto' }}>
+        <input
+          placeholder="Recipient Account ID (0.0.123456)"
+          value={recipientAccountId}
+          onChange={(e) => setRecipientAccountId(e.target.value)}
+          disabled={isLoading}
+          style={{ marginBottom: '10px', padding: '8px', width: '100%' }}
+        />
+        {currentAccountId && currentPrivateKey && !recipientAccountId && (
+          <button
+            onClick={useCurrentAccount}
+            style={{
+              position: 'absolute',
+              right: '5px',
+              top: '5px',
+              padding: '4px 8px',
+              fontSize: '11px',
+              backgroundColor: '#ff9800',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer'
+            }}
+            title="Use current account credentials"
+          >
+            Use Current Account
+          </button>
+        )}
+      </div>
       
       <input
         placeholder="Recipient Private Key"
