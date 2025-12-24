@@ -6,6 +6,7 @@ A comprehensive React-based web application for interacting with the Hedera Hash
 
 ### Account Management
 - **Create New Accounts**: Generate new Hedera accounts using operator credentials
+- **Automatic 10 HBAR Funding**: Newly created accounts automatically receive 10 HBAR transferred from the operator account as initial balance
 - **Auto-Account Creation**: Automatically create accounts when credentials are missing
 - **Account Credentials Storage**: Securely store operator credentials in browser localStorage for future use
 - **Balance Tracking**: View real-time HBAR and token balances for any account
@@ -74,10 +75,13 @@ Before you begin, ensure you have the following installed:
 1. **Set Up Operator Credentials** (Optional but Recommended):
    - Click "➕ Create New Account"
    - Enter your operator Account ID and Private Key
+   - **Important**: Your operator account will fund new accounts with 10 HBAR each, so ensure it has sufficient balance
    - These credentials will be saved in localStorage for future account creation
 
 2. **Create or Enter Account**:
    - If you have operator credentials, accounts can be auto-created
+   - **New accounts automatically receive 10 HBAR** transferred from the operator account upon creation
+   - **Note**: Ensure your operator account has sufficient HBAR balance (10 HBAR + transaction fees)
    - Alternatively, manually enter an existing Account ID and Private Key
    - The dashboard will automatically fetch balances when an account is entered
 

@@ -96,7 +96,7 @@ const TokenCreation = ({
 
   return (
     <div className="create-token-section" style={{ marginBottom: '20px', padding: '20px', border: '1px solid #ccc', borderRadius: '8px', backgroundColor: '#f9f9f9' }}>
-      <h3>Create New Token</h3>
+      <h3 style={{ color: '#084298' }}>Create New Token</h3>
       
       {/* Success Card for Newly Created Token */}
       {createdTokenInfo && (
@@ -348,89 +348,291 @@ const TokenCreation = ({
         </div>
       )}
 
-      <p style={{ fontSize: '12px', color: '#666', marginBottom: '15px' }}>
-        {accountId && privateKey 
-          ? `✅ Using account ${accountId} as treasury`
-          : '⚠️ Please enter Account ID and Private Key to create a token'}
-      </p>
-      
-      <input
-        placeholder="Token Name (e.g., My Token)"
-        value={tokenName}
-        onChange={(e) => setTokenName(e.target.value)}
-        disabled={isLoading}
-        style={{ marginBottom: '10px', padding: '8px', width: '100%', maxWidth: '400px' }}
-      />
-      
-      <input
-        placeholder="Token Symbol (e.g., MTK)"
-        value={tokenSymbol}
-        onChange={(e) => setTokenSymbol(e.target.value)}
-        disabled={isLoading}
-        style={{ marginBottom: '10px', padding: '8px', width: '100%', maxWidth: '400px' }}
-      />
-      
-      <input
-        placeholder="Initial Supply (default: 0)"
-        type="number"
-        value={initialSupply}
-        onChange={(e) => setInitialSupply(e.target.value)}
-        disabled={isLoading}
-        style={{ marginBottom: '10px', padding: '8px', width: '100%', maxWidth: '400px' }}
-      />
-      
-      <input
-        placeholder="Decimals (default: 0)"
-        type="number"
-        value={decimals}
-        onChange={(e) => setDecimals(e.target.value)}
-        disabled={isLoading}
-        min="0"
-        max="8"
-        style={{ marginBottom: '10px', padding: '8px', width: '100%', maxWidth: '400px' }}
-      />
-      
-      <div>
-        <button 
-          onClick={handleCreateToken} 
-          disabled={isLoading || !accountId || !privateKey}
-          style={{ 
-            marginRight: '10px', 
-            padding: '10px 20px', 
-            cursor: isLoading || !accountId || !privateKey ? 'not-allowed' : 'pointer',
-            backgroundColor: isLoading || !accountId || !privateKey ? '#ccc' : '#2196F3',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px'
-          }}
-        >
-          {isLoading ? 'Creating...' : 'Create Token'}
-        </button>
-        <button 
-          onClick={() => {
-            setShowCreateToken(false);
-            setStatus('');
-            setTokenName('');
-            setTokenSymbol('');
-            setInitialSupply('0');
-            setDecimals('0');
-          }} 
-          disabled={isLoading}
-          style={{ 
-            padding: '10px 20px', 
-            cursor: isLoading ? 'not-allowed' : 'pointer',
-            backgroundColor: '#666',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px'
-          }}
-        >
-          Close
-        </button>
+      <div style={{ 
+        backgroundColor: 'white', 
+        padding: '20px', 
+        borderRadius: '8px', 
+        border: '1px solid #dee2e6',
+        marginBottom: '20px'
+      }}>
+        <p style={{ 
+          fontSize: '13px', 
+          color: '#666', 
+          marginBottom: '20px',
+          padding: '10px',
+          backgroundColor: '#f8f9fa',
+          borderRadius: '4px',
+          border: '1px solid #e9ecef'
+        }}>
+          {accountId && privateKey 
+            ? `✅ Using account ${accountId} as treasury`
+            : '⚠️ Please enter Account ID and Private Key to create a token'}
+        </p>
+        
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{ 
+            display: 'block', 
+            fontSize: '13px', 
+            fontWeight: '600', 
+            marginBottom: '8px',
+            color: '#333'
+          }}>
+            Token Name <span style={{ color: '#dc3545' }}>*</span>
+          </label>
+          <input
+            placeholder="e.g., My Token"
+            value={tokenName}
+            onChange={(e) => setTokenName(e.target.value)}
+            disabled={isLoading}
+            style={{ 
+              width: '100%', 
+              padding: '10px 12px', 
+              fontSize: '14px',
+              border: '1px solid #ced4da',
+              borderRadius: '4px',
+              boxSizing: 'border-box',
+              transition: 'border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out',
+              opacity: isLoading ? 0.6 : 1,
+              cursor: isLoading ? 'not-allowed' : 'text'
+            }}
+            onFocus={(e) => {
+              if (!isLoading) {
+                e.target.style.borderColor = '#80bdff';
+                e.target.style.outline = '0';
+                e.target.style.boxShadow = '0 0 0 0.2rem rgba(0,123,255,.25)';
+              }
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = '#ced4da';
+              e.target.style.boxShadow = 'none';
+            }}
+          />
+        </div>
+        
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{ 
+            display: 'block', 
+            fontSize: '13px', 
+            fontWeight: '600', 
+            marginBottom: '8px',
+            color: '#333'
+          }}>
+            Token Symbol <span style={{ color: '#dc3545' }}>*</span>
+          </label>
+          <input
+            placeholder="e.g., MTK"
+            value={tokenSymbol}
+            onChange={(e) => setTokenSymbol(e.target.value)}
+            disabled={isLoading}
+            style={{ 
+              width: '100%', 
+              padding: '10px 12px', 
+              fontSize: '14px',
+              border: '1px solid #ced4da',
+              borderRadius: '4px',
+              boxSizing: 'border-box',
+              transition: 'border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out',
+              opacity: isLoading ? 0.6 : 1,
+              cursor: isLoading ? 'not-allowed' : 'text'
+            }}
+            onFocus={(e) => {
+              if (!isLoading) {
+                e.target.style.borderColor = '#80bdff';
+                e.target.style.outline = '0';
+                e.target.style.boxShadow = '0 0 0 0.2rem rgba(0,123,255,.25)';
+              }
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = '#ced4da';
+              e.target.style.boxShadow = 'none';
+            }}
+          />
+        </div>
+        
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{ 
+            display: 'block', 
+            fontSize: '13px', 
+            fontWeight: '600', 
+            marginBottom: '8px',
+            color: '#333'
+          }}>
+            Initial Supply
+          </label>
+          <input
+            placeholder="0"
+            type="number"
+            min="0"
+            value={initialSupply}
+            onChange={(e) => setInitialSupply(e.target.value)}
+            disabled={isLoading}
+            style={{ 
+              width: '100%', 
+              padding: '10px 12px', 
+              fontSize: '14px',
+              border: '1px solid #ced4da',
+              borderRadius: '4px',
+              boxSizing: 'border-box',
+              transition: 'border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out',
+              opacity: isLoading ? 0.6 : 1,
+              cursor: isLoading ? 'not-allowed' : 'text'
+            }}
+            onFocus={(e) => {
+              if (!isLoading) {
+                e.target.style.borderColor = '#80bdff';
+                e.target.style.outline = '0';
+                e.target.style.boxShadow = '0 0 0 0.2rem rgba(0,123,255,.25)';
+              }
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = '#ced4da';
+              e.target.style.boxShadow = 'none';
+            }}
+          />
+          <small style={{ 
+            display: 'block', 
+            marginTop: '5px', 
+            fontSize: '12px', 
+            color: '#6c757d' 
+          }}>
+            Initial token supply to mint (default: 0)
+          </small>
+        </div>
+        
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{ 
+            display: 'block', 
+            fontSize: '13px', 
+            fontWeight: '600', 
+            marginBottom: '8px',
+            color: '#333'
+          }}>
+            Decimals
+          </label>
+          <input
+            placeholder="0"
+            type="number"
+            min="0"
+            max="8"
+            value={decimals}
+            onChange={(e) => setDecimals(e.target.value)}
+            disabled={isLoading}
+            style={{ 
+              width: '100%', 
+              padding: '10px 12px', 
+              fontSize: '14px',
+              border: '1px solid #ced4da',
+              borderRadius: '4px',
+              boxSizing: 'border-box',
+              transition: 'border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out',
+              opacity: isLoading ? 0.6 : 1,
+              cursor: isLoading ? 'not-allowed' : 'text'
+            }}
+            onFocus={(e) => {
+              if (!isLoading) {
+                e.target.style.borderColor = '#80bdff';
+                e.target.style.outline = '0';
+                e.target.style.boxShadow = '0 0 0 0.2rem rgba(0,123,255,.25)';
+              }
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = '#ced4da';
+              e.target.style.boxShadow = 'none';
+            }}
+          />
+          <small style={{ 
+            display: 'block', 
+            marginTop: '5px', 
+            fontSize: '12px', 
+            color: '#6c757d' 
+          }}>
+            Number of decimal places (0-8, default: 0)
+          </small>
+        </div>
+
+        <div style={{ 
+          paddingTop: '15px', 
+          borderTop: '1px solid #dee2e6',
+          display: 'flex',
+          gap: '10px',
+          flexWrap: 'wrap'
+        }}>
+          <button 
+            onClick={handleCreateToken} 
+            disabled={isLoading || !accountId || !privateKey}
+            style={{ 
+              padding: '10px 24px', 
+              fontSize: '14px',
+              fontWeight: '600',
+              cursor: isLoading || !accountId || !privateKey ? 'not-allowed' : 'pointer',
+              backgroundColor: isLoading || !accountId || !privateKey ? '#ccc' : '#2196F3',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              transition: 'background-color 0.15s ease-in-out',
+              opacity: isLoading || !accountId || !privateKey ? 0.6 : 1
+            }}
+            onMouseEnter={(e) => {
+              if (!isLoading && accountId && privateKey) {
+                e.target.style.backgroundColor = '#0b7dda';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isLoading && accountId && privateKey) {
+                e.target.style.backgroundColor = '#2196F3';
+              }
+            }}
+          >
+            {isLoading ? '⏳ Creating...' : '🪙 Create Token'}
+          </button>
+          <button 
+            onClick={() => {
+              setShowCreateToken(false);
+              setStatus('');
+              setTokenName('');
+              setTokenSymbol('');
+              setInitialSupply('0');
+              setDecimals('0');
+            }} 
+            disabled={isLoading}
+            style={{ 
+              padding: '10px 24px', 
+              fontSize: '14px',
+              fontWeight: '600',
+              cursor: isLoading ? 'not-allowed' : 'pointer',
+              backgroundColor: '#6c757d',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              transition: 'background-color 0.15s ease-in-out',
+              opacity: isLoading ? 0.6 : 1
+            }}
+            onMouseEnter={(e) => {
+              if (!isLoading) {
+                e.target.style.backgroundColor = '#5a6268';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isLoading) {
+                e.target.style.backgroundColor = '#6c757d';
+              }
+            }}
+          >
+            ✕ Close
+          </button>
+        </div>
       </div>
       
       {status && (
-        <div style={{ marginTop: '15px', fontSize: '14px', padding: '10px', backgroundColor: status.includes('✅') ? '#d4edda' : '#f8d7da', borderRadius: '4px' }}>
+        <div style={{ 
+          marginTop: '15px', 
+          fontSize: '14px', 
+          padding: '12px 15px', 
+          backgroundColor: status.includes('✅') ? '#d4edda' : '#f8d7da',
+          border: `1px solid ${status.includes('✅') ? '#c3e6cb' : '#f5c6cb'}`,
+          borderRadius: '4px',
+          color: status.includes('✅') ? '#155724' : '#721c24'
+        }}>
           {status}
         </div>
       )}

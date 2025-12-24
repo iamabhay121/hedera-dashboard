@@ -13,6 +13,8 @@ const AccountCreation = ({
   onDismissSuccess
 }) => {
   const [copiedField, setCopiedField] = useState(null);
+  const [automaticAssociation, setAutomaticAssociation] = useState('0');
+  const [memo, setMemo] = useState('');
 
   const copyToClipboard = async (text, fieldName) => {
     try {
@@ -37,7 +39,7 @@ const AccountCreation = ({
 
   return (
     <div className="create-account-section" style={{ marginBottom: '20px', padding: '20px', border: '1px solid #ccc', borderRadius: '8px', backgroundColor: '#f9f9f9' }}>
-      <h3>Create New Account</h3>
+      <h3 style={{ color: '#155724' }}>Create New Account</h3>
       
       {/* Success Card for Newly Created Account */}
       {createdAccountInfo && (
@@ -188,39 +190,243 @@ const AccountCreation = ({
         </div>
       )}
 
-      <p style={{ fontSize: '12px', color: '#666', marginBottom: '15px' }}>
-        {operatorId && operatorKey 
-          ? '✅ Operator credentials saved! You can create multiple accounts with the same operator.'
-          : 'Enter your operator account credentials (to pay for account creation). These will be saved for future use.'}
-      </p>
-      <input
-        placeholder="Operator Account ID (0.0.123456)"
-        value={operatorId}
-        onChange={(e) => setOperatorId(e.target.value)}
-        style={{ marginBottom: '10px', padding: '8px', width: '100%', maxWidth: '400px' }}
-      />
-      <input
-        placeholder="Operator Private Key"
-        type="text"
-        value={operatorKey}
-        onChange={(e) => setOperatorKey(e.target.value)}
-        style={{ marginBottom: '10px', padding: '8px', width: '100%', maxWidth: '400px' }}
-      />
-      <div>
-        <button onClick={onCreateAccount} style={{ marginRight: '10px', padding: '10px 20px', cursor: 'pointer' }}>
-          Create Account
-        </button>
-        {operatorId && operatorKey && (
+      <div style={{ 
+        backgroundColor: 'white', 
+        padding: '20px', 
+        borderRadius: '8px', 
+        border: '1px solid #dee2e6',
+        marginBottom: '20px'
+      }}>
+        <p style={{ 
+          fontSize: '13px', 
+          color: '#666', 
+          marginBottom: '20px',
+          padding: '10px',
+          backgroundColor: '#f8f9fa',
+          borderRadius: '4px',
+          border: '1px solid #e9ecef'
+        }}>
+          {operatorId && operatorKey 
+            ? '✅ Operator credentials saved! You can create multiple accounts with the same operator.'
+            : 'Enter your operator account credentials (to pay for account creation). These will be saved for future use.'}
+        </p>
+        
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{ 
+            display: 'block', 
+            fontSize: '13px', 
+            fontWeight: '600', 
+            marginBottom: '8px',
+            color: '#333'
+          }}>
+            Operator Account ID <span style={{ color: '#dc3545' }}>*</span>
+          </label>
+          <input
+            placeholder="0.0.123456"
+            value={operatorId}
+            onChange={(e) => setOperatorId(e.target.value)}
+            style={{ 
+              width: '100%', 
+              padding: '10px 12px', 
+              fontSize: '14px',
+              border: '1px solid #ced4da',
+              borderRadius: '4px',
+              boxSizing: 'border-box',
+              transition: 'border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out'
+            }}
+            onFocus={(e) => {
+              e.target.style.borderColor = '#80bdff';
+              e.target.style.outline = '0';
+              e.target.style.boxShadow = '0 0 0 0.2rem rgba(0,123,255,.25)';
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = '#ced4da';
+              e.target.style.boxShadow = 'none';
+            }}
+          />
+        </div>
+
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{ 
+            display: 'block', 
+            fontSize: '13px', 
+            fontWeight: '600', 
+            marginBottom: '8px',
+            color: '#333'
+          }}>
+            Operator Private Key <span style={{ color: '#dc3545' }}>*</span>
+          </label>
+          <input
+            placeholder="Enter your operator private key"
+            type="text"
+            value={operatorKey}
+            onChange={(e) => setOperatorKey(e.target.value)}
+            style={{ 
+              width: '100%', 
+              padding: '10px 12px', 
+              fontSize: '14px',
+              border: '1px solid #ced4da',
+              borderRadius: '4px',
+              boxSizing: 'border-box',
+              transition: 'border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out'
+            }}
+            onFocus={(e) => {
+              e.target.style.borderColor = '#80bdff';
+              e.target.style.outline = '0';
+              e.target.style.boxShadow = '0 0 0 0.2rem rgba(0,123,255,.25)';
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = '#ced4da';
+              e.target.style.boxShadow = 'none';
+            }}
+          />
+        </div>
+
+        {/* <div style={{ marginBottom: '20px' }}>
+          <label style={{ 
+            display: 'block', 
+            fontSize: '13px', 
+            fontWeight: '600', 
+            marginBottom: '8px',
+            color: '#333'
+          }}>
+            Max Automatic Token Associations
+          </label>
+          <input
+            placeholder="0"
+            type="number"
+            min="0"
+            value={automaticAssociation}
+            onChange={(e) => setAutomaticAssociation(e.target.value)}
+            style={{ 
+              width: '100%', 
+              padding: '10px 12px', 
+              fontSize: '14px',
+              border: '1px solid #ced4da',
+              borderRadius: '4px',
+              boxSizing: 'border-box',
+              transition: 'border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out'
+            }}
+            onFocus={(e) => {
+              e.target.style.borderColor = '#80bdff';
+              e.target.style.outline = '0';
+              e.target.style.boxShadow = '0 0 0 0.2rem rgba(0,123,255,.25)';
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = '#ced4da';
+              e.target.style.boxShadow = 'none';
+            }}
+          />
+          <small style={{ 
+            display: 'block', 
+            marginTop: '5px', 
+            fontSize: '12px', 
+            color: '#6c757d' 
+          }}>
+            Maximum number of tokens this account can automatically associate (default: 0)
+          </small>
+        </div> */}
+
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{ 
+            display: 'block', 
+            fontSize: '13px', 
+            fontWeight: '600', 
+            marginBottom: '8px',
+            color: '#333'
+          }}>
+            Account Memo <span style={{ fontSize: '12px', fontWeight: 'normal', color: '#6c757d' }}>(Optional)</span>
+          </label>
+          <input
+            placeholder="Enter account memo"
+            type="text"
+            value={memo}
+            onChange={(e) => setMemo(e.target.value)}
+            style={{ 
+              width: '100%', 
+              padding: '10px 12px', 
+              fontSize: '14px',
+              border: '1px solid #ced4da',
+              borderRadius: '4px',
+              boxSizing: 'border-box',
+              transition: 'border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out'
+            }}
+            onFocus={(e) => {
+              e.target.style.borderColor = '#80bdff';
+              e.target.style.outline = '0';
+              e.target.style.boxShadow = '0 0 0 0.2rem rgba(0,123,255,.25)';
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = '#ced4da';
+              e.target.style.boxShadow = 'none';
+            }}
+          />
+        </div>
+
+        <div style={{ 
+          paddingTop: '15px', 
+          borderTop: '1px solid #dee2e6',
+          display: 'flex',
+          gap: '10px',
+          flexWrap: 'wrap'
+        }}>
           <button 
-            onClick={onClearOperator} 
-            style={{ marginRight: '10px', padding: '10px 20px', cursor: 'pointer', backgroundColor: '#ff6b6b', color: 'white', border: 'none' }}
+            onClick={() => onCreateAccount(10, automaticAssociation, memo)} 
+            style={{ 
+              padding: '10px 24px', 
+              fontSize: '14px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              backgroundColor: '#28a745',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              transition: 'background-color 0.15s ease-in-out'
+            }}
+            onMouseEnter={(e) => e.target.style.backgroundColor = '#218838'}
+            onMouseLeave={(e) => e.target.style.backgroundColor = '#28a745'}
           >
-            Clear Operator
+            ➕ Create Account
           </button>
-        )}
-        <button onClick={() => setShowCreateAccount(false)} style={{ padding: '10px 20px', cursor: 'pointer' }}>
-          Close
-        </button>
+          {operatorId && operatorKey && (
+            <button 
+              onClick={onClearOperator} 
+              style={{ 
+                padding: '10px 24px', 
+                fontSize: '14px',
+                fontWeight: '600',
+                cursor: 'pointer', 
+                backgroundColor: '#ff6b6b', 
+                color: 'white', 
+                border: 'none',
+                borderRadius: '4px',
+                transition: 'background-color 0.15s ease-in-out'
+              }}
+              onMouseEnter={(e) => e.target.style.backgroundColor = '#e55a5a'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = '#ff6b6b'}
+            >
+              🗑️ Clear Operator
+            </button>
+          )}
+          <button 
+            onClick={() => setShowCreateAccount(false)} 
+            style={{ 
+              padding: '10px 24px', 
+              fontSize: '14px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              backgroundColor: '#6c757d',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              transition: 'background-color 0.15s ease-in-out'
+            }}
+            onMouseEnter={(e) => e.target.style.backgroundColor = '#5a6268'}
+            onMouseLeave={(e) => e.target.style.backgroundColor = '#6c757d'}
+          >
+            ✕ Close
+          </button>
+        </div>
       </div>
     </div>
   );
